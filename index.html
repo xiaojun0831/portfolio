@@ -95,52 +95,119 @@
     .linkedin-link:hover {
       background: #005983;
     }
-    /* Symbol flip button style: round, compact, icon-only, shadow */
-    .icon-flip-btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 44px;
-      height: 44px;
-      background: #6c49ac;
-      color: white;
-      border: none;
-      border-radius: 50%;
-      font-size: 1.6rem;
-      box-shadow: 0 2px 8px #5875ad22;
-      cursor: pointer;
-      transition: background 0.16s, transform 0.2s;
-      outline: none;
-      position: relative;
-      vertical-align: middle;
-      margin: 0;
-    }
+
+    /* --- FLIP-BTN with PROGRESS RING STYLING --- */
     .flip-btn-outer {
       margin: 36px auto 0 auto;
       display: flex;
       justify-content: center;
       align-items: center;
       height: 70px;
-      /* keep separated from card visually */
       pointer-events: none; /* prevent accidental hover over outer div */
       z-index: 10;
       position: relative;
       max-width: 620px;
     }
-    .icon-flip-btn {
-      pointer-events: auto; /* restore pointer interaction for button itself */
+    .flip-image-btn-holder {
+      position: relative;
+      width: 66px;
+      height: 66px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: auto;
     }
-    .icon-flip-btn:hover {
-      background: #49277a;
-      transform: scale(1.12) rotateY(180deg);
+    .flip-image-btn {
+      all: unset;
+      cursor: pointer;
+      width: 54px;
+      height: 54px;
+      border-radius: 50%;
+      box-shadow: 0 2px 12px #a78ee522;
+      background: #f5f3fe url('https://placehold.co/48x48?text=FLIP') center center/48px 48px no-repeat;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+      top: 6px;
+      left: 6px;
+      z-index: 2;
+      /* fallback for bg image not loading */
+      color: #6c49ac;
+      font-size: 1.1rem;
+      transition: background 0.2s, box-shadow 0.2s;
     }
-    .flip-btn-back {
-      background: #7438c9;
+    .flip-image-btn[disabled] {
+      opacity: 0.7;
+      cursor: default;
     }
-    .flip-btn-back:hover {
-      background: #49277a;
-      transform: scale(1.12) rotateY(180deg);
+    .progress-ring {
+      position: absolute;
+      width: 66px;
+      height: 66px;
+      left: 0;
+      top: 0;
+      z-index: 3;
+      pointer-events: none;
+      touch-action: none;
     }
+    .progress-ring__circle {
+      stroke: #7f57ec;
+      stroke-width: 4.4;
+      fill: none;
+      stroke-linecap: round;
+      transition: stroke-dashoffset 0.11s;
+      filter: drop-shadow(0 0 5px #d5cafd6c);
+    }
+    .progress-ring__bg {
+      stroke: #efeafd;
+      stroke-width: 4.4;
+      fill: none;
+    }
+
+    /* Vibration animation for interface */
+    @keyframes vibrate-interface {
+      0% { transform: translate(0px,0px) rotate(0deg);}
+      10% { transform: translate(-1px,1px) rotate(-1deg);}
+      20% { transform: translate(-2px,0px) rotate(1deg);}
+      30% { transform: translate(1px,-1px) rotate(0deg);}
+      40% { transform: translate(3px,1px) rotate(1deg);}
+      50% { transform: translate(-1px,2px) rotate(-1deg);}
+      60% { transform: translate(-3px,1px) rotate(0deg);}
+      70% { transform: translate(2px,1px) rotate(-1deg);}
+      80% { transform: translate(-1px,-1px) rotate(1deg);}
+      90% { transform: translate(2px,2px) rotate(0deg);}
+      100% { transform: translate(0px,0px) rotate(0deg);}
+    }
+    .vibrate-moderate {
+      animation: vibrate-interface 0.09s linear infinite;
+    }
+
+    /* BACK FLIP BUTTON styling, disables ring/progress/vib, just quick image flip */
+    .flip-image-btn-back {
+      all: unset;
+      cursor: pointer;
+      width: 54px;
+      height: 54px;
+      border-radius: 50%;
+      box-shadow: 0 2px 12px #a292d822;
+      background: #e4e8f7 url('https://placehold.co/48x48?text=BACK') center center/48px 48px no-repeat;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+      top: 6px;
+      left: 6px;
+      z-index: 2;
+      color: #7138a6;
+      font-size: 1.1rem;
+      transition: background 0.2s, box-shadow 0.2s;
+    }
+    .flip-image-btn-back[disabled] {
+      opacity: 0.5;
+      cursor: default;
+    }
+
     footer {
       margin-top: 35px;
       font-size: .99rem;
@@ -189,49 +256,47 @@
       }
       .flip-perspective { margin: 32px auto; }
       .flip-btn-outer { margin-top: 18px; }
+      .flip-image-btn-holder { width: 52vw; max-width: 70px; }
     }
   </style>
 </head>
 <body>
-  <!-- FLIP BUTTON OUTSIDE MAIN BLOCK -->
+  <!-- FLIP BUTTON WITH PROGRESS RING -->
   <div class="flip-btn-outer">
-    <button class="icon-flip-btn"
-            id="flipToggleBtn"
-            aria-label="See Hobbies"
-            title="See Hobbies"
-            style="display: block;"
-    >
-      <!-- SVG: Proper circular arrow with two arrowheads -->
-      <svg aria-hidden="true" width="28" height="28" viewBox="0 0 32 32" style="display:block;" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <g>
-          <!-- Top semicircle with arrowhead right -->
-          <path d="M7 16a9 9 0 0 1 15.36-6.36" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>
-          <polygon points="20.8,10.0 21.0,6.2 24.5,8.4" fill="currentColor"/>
-          <!-- Bottom semicircle with arrowhead left -->
-          <path d="M25 16a9 9 0 0 1-15.36 6.36" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>
-          <polygon points="11.2,22.0 11.0,25.8 7.5,23.6" fill="currentColor"/>
-        </g>
+    <div class="flip-image-btn-holder" id="flipBtnHolder" style="pointer-events:auto;">
+      <!-- Progress Ring SVG -->
+      <svg class="progress-ring" width="66" height="66">
+        <circle
+          class="progress-ring__bg"
+          cx="33" cy="33" r="28"
+        />
+        <circle
+          class="progress-ring__circle"
+          cx="33" cy="33" r="28"
+          stroke-dasharray="176"
+          stroke-dashoffset="176"
+        />
       </svg>
-    </button>
-    <!-- BACK FLIP BUTTON: Only visible when flipped (handled via script) -->
-    <button class="icon-flip-btn flip-btn-back"
-            id="flipBackBtn"
-            aria-label="Back to Portfolio"
-            title="Back to Portfolio"
-            style="display: none; margin-left: 16px;"
-    >
-      <!-- SVG: Proper circular arrow with two arrowheads, reversed for "back" -->
-      <svg aria-hidden="true" width="28" height="28" viewBox="0 0 32 32" style="display:block; transform:scaleX(-1);" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <g>
-          <!-- Top semicircle with arrowhead right (now visually left when mirrored) -->
-          <path d="M7 16a9 9 0 0 1 15.36-6.36" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>
-          <polygon points="20.8,10.0 21.0,6.2 24.5,8.4" fill="currentColor"/>
-          <!-- Bottom semicircle with arrowhead left (now visually right when mirrored) -->
-          <path d="M25 16a9 9 0 0 1-15.36 6.36" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>
-          <polygon points="11.2,22.0 11.0,25.8 7.5,23.6" fill="currentColor"/>
-        </g>
-      </svg>
-    </button>
+      <button
+        type="button"
+        class="flip-image-btn"
+        id="flipToggleBtn"
+        aria-label="See Hobbies"
+        title="See Hobbies"
+        tabindex="0"
+        style="display: block;"
+      ></button>
+      <!-- BACK FLIP BUTTON (no ring or progress: instant flip) -->
+      <button
+        type="button"
+        class="flip-image-btn-back"
+        id="flipBackBtn"
+        aria-label="Back to Portfolio"
+        title="Back to Portfolio"
+        tabindex="0"
+        style="display: none;"
+      ></button>
+    </div>
   </div>
   <div class="flip-perspective">
     <div class="flip-card" id="flipCard">
@@ -286,11 +351,65 @@
   </div>
   <script src="script.js"></script>
   <script>
-    // --- Animated FLIP LOGIC ---
+    // --- FLIP LOGIC with PROGRESS & VIBRATION ---
     const flipCard = document.getElementById('flipCard');
     const flipBtn = document.getElementById('flipToggleBtn');
     const flipBackBtn = document.getElementById('flipBackBtn');
+    const flipBtnHolder = document.getElementById('flipBtnHolder');
+    const ring = flipBtnHolder.querySelector('.progress-ring__circle');
+    const ringBg = flipBtnHolder.querySelector('.progress-ring__bg');
+    const PROGRESS_DURATION = 850; // ms
+    const RADIUS = 28;
+    const RING_CIRC = 2 * Math.PI * RADIUS;
 
+    // Set initial SVG dasharray/dashoffset
+    ring.setAttribute('stroke-dasharray', RING_CIRC);
+    ring.setAttribute('stroke-dashoffset', RING_CIRC);
+
+    // ---- HOVER/RING/VIBE CONTROL LOGIC
+    let progressTimer = null, animationStart = 0, ticking = false;
+
+    function vibrateInterfaceStart() {
+      document.body.classList.add('vibrate-moderate');
+    }
+    function vibrateInterfaceStop() {
+      document.body.classList.remove('vibrate-moderate');
+    }
+    function startProgressRing() {
+      animationStart = performance.now();
+      ticking = true;
+      requestAnimationFrame(progressTick);
+    }
+    function resetProgressRing() {
+      ring.setAttribute('stroke-dashoffset', RING_CIRC);
+    }
+    function progressTick(now) {
+      if (!ticking) return;
+      let elapsed = now - animationStart;
+      if (elapsed > PROGRESS_DURATION) elapsed = PROGRESS_DURATION;
+      const percent = elapsed / PROGRESS_DURATION;
+      ring.setAttribute('stroke-dashoffset', (RING_CIRC * (1 - percent)).toFixed(2));
+      if (elapsed < PROGRESS_DURATION) {
+        requestAnimationFrame(progressTick);
+      } else {
+        ticking = false;
+        // End: Do the flip!
+        vibrateInterfaceStop();
+        flipBtn.disabled = true;
+        setTimeout(() => flipBtn.disabled = false, 700);
+        flipCard.classList.add('flipped');
+        document.body.classList.add('hobbies-bg');
+        updateFlipBtns();
+        resetProgressRing();
+      }
+    }
+    function cancelRingAndVibe() {
+      ticking = false;
+      resetProgressRing();
+      vibrateInterfaceStop();
+    }
+
+    // --- BUTTON MODE MANAGEMENT
     function updateFlipBtns() {
       if (flipCard.classList.contains('flipped')) {
         flipBtn.style.display = "none";
@@ -301,17 +420,62 @@
       }
     }
 
-    flipBtn.onclick = function() {
-      flipCard.classList.add('flipped');
-      document.body.classList.add('hobbies-bg');
-      updateFlipBtns();
-    };
+    // Hover/press/leave to trigger progress, vibration, flip
+    flipBtn.addEventListener('pointerenter', e => {
+      if (flipCard.classList.contains('flipped')) return;
+      vibrateInterfaceStart();
+      startProgressRing();
+    });
+    flipBtn.addEventListener('pointerleave', e => {
+      if (!ticking) return;
+      cancelRingAndVibe();
+    });
+    // Also cancel if for some reason mouseup outside, etc.
+    flipBtn.addEventListener('pointercancel', cancelRingAndVibe);
+
+    // Don't allow click-tap to flip instantly. But for accessibility, allow SPACE/ENTER:
+    flipBtn.addEventListener('keydown', (e) => {
+      if (e.key === ' ' || e.key === 'Enter') {
+        if (flipCard.classList.contains('flipped')) return;
+        cancelRingAndVibe();
+        vibrateInterfaceStart();
+        ring.setAttribute('stroke-dashoffset', 0);
+        setTimeout(() => {
+          vibrateInterfaceStop();
+          flipCard.classList.add('flipped');
+          document.body.classList.add('hobbies-bg');
+          updateFlipBtns();
+          resetProgressRing();
+        }, 220);
+      }
+    });
+
+    // For tap events: simulate mouse hover/leave (just instantly do it)
+    flipBtn.addEventListener('click', (e) => {
+      if ('ontouchstart' in window) {
+        if (ticking) {
+          cancelRingAndVibe();
+        }
+        vibrateInterfaceStart();
+        ring.setAttribute('stroke-dashoffset', 0);
+        setTimeout(() => {
+          vibrateInterfaceStop();
+          flipCard.classList.add('flipped');
+          document.body.classList.add('hobbies-bg');
+          updateFlipBtns();
+          resetProgressRing();
+        }, 210);
+      }
+    });
+
+    // Back button: instant, no vibe/progress
     flipBackBtn.onclick = function() {
       flipCard.classList.remove('flipped');
       document.body.classList.remove('hobbies-bg');
       updateFlipBtns();
     };
 
+    // Accessibility keys for flipping (Arrow keys, Escape)
     document.addEventListener('keydown', e => {
       if(flipCard.classList.contains('flipped')) {
         if(e.key === 'ArrowLeft' || e.key === 'Escape') {
@@ -319,7 +483,17 @@
         }
       } else {
         if(e.key === 'ArrowRight') {
-          flipBtn.focus(); flipBtn.click();
+          flipBtn.focus();
+          // Start ring animation by simulating pointerenter and hold:
+          vibrateInterfaceStart();
+          ring.setAttribute('stroke-dashoffset', 0);
+          setTimeout(() => {
+            vibrateInterfaceStop();
+            flipCard.classList.add('flipped');
+            document.body.classList.add('hobbies-bg');
+            updateFlipBtns();
+            resetProgressRing();
+          }, 220);
         }
       }
     });
