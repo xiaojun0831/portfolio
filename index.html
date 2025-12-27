@@ -369,6 +369,9 @@
     // ---- HOVER/RING/VIBE CONTROL LOGIC
     let progressTimer = null, animationStart = 0, ticking = false;
 
+    // --- FIX: Block hover/progress if card is flipped ---
+    let preventingFlipBtns = false;
+    
     function vibrateInterfaceStart() {
       document.body.classList.add('vibrate-moderate');
     }
@@ -414,21 +417,32 @@
       if (flipCard.classList.contains('flipped')) {
         flipBtn.style.display = "none";
         flipBackBtn.style.display = "block";
+        // --- As soon as flipped, prevent hover effects until user moves cursor out ---
+        preventingFlipBtns = true;
       } else {
         flipBtn.style.display = "block";
         flipBackBtn.style.display = "none";
+        preventingFlipBtns = false;
       }
+    }
+
+    // --- Block progress/vibration if currently flipped or just unflipped ---
+    function canTriggerFlipBtn() {
+      return !flipCard.classList.contains('flipped') && !preventingFlipBtns;
     }
 
     // Hover/press/leave to trigger progress, vibration, flip
     flipBtn.addEventListener('pointerenter', e => {
-      if (flipCard.classList.contains('flipped')) return;
+      if (!canTriggerFlipBtn()) return;
       vibrateInterfaceStart();
       startProgressRing();
     });
     flipBtn.addEventListener('pointerleave', e => {
-      if (!ticking) return;
-      cancelRingAndVibe();
+      if (ticking) {
+        cancelRingAndVibe();
+      }
+      // If user moved mouse out (after coming back from hobbies), allow hover again
+      preventingFlipBtns = false;
     });
     // Also cancel if for some reason mouseup outside, etc.
     flipBtn.addEventListener('pointercancel', cancelRingAndVibe);
@@ -436,7 +450,7 @@
     // Don't allow click-tap to flip instantly. But for accessibility, allow SPACE/ENTER:
     flipBtn.addEventListener('keydown', (e) => {
       if (e.key === ' ' || e.key === 'Enter') {
-        if (flipCard.classList.contains('flipped')) return;
+        if (!canTriggerFlipBtn()) return;
         cancelRingAndVibe();
         vibrateInterfaceStart();
         ring.setAttribute('stroke-dashoffset', 0);
@@ -453,6 +467,7 @@
     // For tap events: simulate mouse hover/leave (just instantly do it)
     flipBtn.addEventListener('click', (e) => {
       if ('ontouchstart' in window) {
+        if (!canTriggerFlipBtn()) return;
         if (ticking) {
           cancelRingAndVibe();
         }
@@ -473,6 +488,9 @@
       flipCard.classList.remove('flipped');
       document.body.classList.remove('hobbies-bg');
       updateFlipBtns();
+      // --- FIX: Immediately cancel any in-progress vibration, and require pointerleave before re-enabling hover flip ---
+      cancelRingAndVibe();
+      preventingFlipBtns = true; // block triggers until pointerleave on flipBtn happens
     };
 
     // Accessibility keys for flipping (Arrow keys, Escape)
@@ -484,6 +502,7 @@
       } else {
         if(e.key === 'ArrowRight') {
           flipBtn.focus();
+          if (!canTriggerFlipBtn()) return;
           // Start ring animation by simulating pointerenter and hold:
           vibrateInterfaceStart();
           ring.setAttribute('stroke-dashoffset', 0);
