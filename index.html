@@ -16,9 +16,41 @@
       padding: 0;
       transition: background 0.4s;
     }
-    .container, .hobbies-container {
+    .flip-perspective {
+      perspective: 1200px;
+      position: relative;
       max-width: 620px;
       margin: 64px auto;
+      /* Matches .container and .hobbies-container for alignment  */
+    }
+    .flip-card {
+      width: 100%;
+      position: relative;
+      transition: transform 0.82s cubic-bezier(.76,.05,.25,.99);
+      transform-style: preserve-3d;
+      min-height: 100%;
+    }
+    .flip-card.flipped {
+      transform: rotateY(180deg);
+    }
+    .flip-face {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      left: 0; top: 0;
+      backface-visibility: hidden;
+      /* Ensure stacking for flip */
+    }
+    .flip-face.front {
+      z-index: 2;
+    }
+    .flip-face.back {
+      transform: rotateY(180deg);
+      z-index: 1;
+    }
+
+    .container, .hobbies-container {
+      max-width: 620px;
       background: #fff;
       box-shadow: 0 10px 32px rgba(61,83,141,0.11);
       border-radius: 15px;
@@ -27,6 +59,7 @@
       transition: background 0.4s, color 0.4s;
       position: relative;
       z-index: 2;
+      margin: 0; /* Let .flip-perspective handle overall margin */
     }
     h1 {
       margin-top: 0;
@@ -41,7 +74,7 @@
     .btn-group {
       margin-bottom: 36px;
     }
-    .portfolio-link, .linkedin-link, .flip-btn {
+    .portfolio-link, .linkedin-link {
       display: inline-block;
       padding: 13px 30px;
       font-size: 1.15rem;
@@ -56,13 +89,6 @@
       margin: 0 10px 10px 0;
       cursor: pointer;
     }
-    .flip-btn {
-      background: #6c49ac;
-      margin-top: 22px;
-    }
-    .flip-btn:hover {
-      background: #49277a;
-    }
     .portfolio-link:hover, .linkedin-link:hover {
       background: #14436b;
     }
@@ -71,6 +97,39 @@
     }
     .linkedin-link:hover {
       background: #005983;
+    }
+    /* Symbol flip button style: round, compact, icon-only, shadow */
+    .icon-flip-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      background: #6c49ac;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      font-size: 1.6rem;
+      box-shadow: 0 2px 8px #5875ad22;
+      cursor: pointer;
+      transition: background 0.16s, transform 0.2s;
+      margin: 22px auto 0 auto;
+      outline: none;
+      position: relative;
+      vertical-align: middle;
+    }
+    .icon-flip-btn:hover {
+      background: #49277a;
+      transform: scale(1.12) rotateY(180deg);
+    }
+    .flip-btn-back {
+      /* For back button (back arrow) */
+      background: #7438c9;
+      margin-top: 28px;
+    }
+    .flip-btn-back:hover {
+      background: #49277a;
+      transform: scale(1.12) rotateY(180deg);
     }
     footer {
       margin-top: 35px;
@@ -111,95 +170,118 @@
       color: #7438c9;
       margin-right: 10px;
     }
+    .flip-extra-spacing {
+      margin-bottom: 40px;
+    }
     @media (max-width: 650px) {
       .container, .hobbies-container {
         padding: 22px 5vw 18px 5vw;
       }
+      .flip-perspective { margin: 32px auto; }
     }
   </style>
 </head>
 <body>
-  <div id="main-content">
-    <div class="container">
-      <h1>My Data Science Portfolio</h1>
-      <div class="desc">
-        Welcome! Explore my analysis—click the links below to view my featured data science report and connect on LinkedIn.
+  <div class="flip-perspective">
+    <div class="flip-card" id="flipCard">
+      <!-- FRONT: Portfolio -->
+      <div class="flip-face front">
+        <div class="container">
+          <h1>My Data Science Portfolio</h1>
+          <div class="desc">
+            Welcome! Explore my analysis—click the links below to view my featured data science report and connect on LinkedIn.
+          </div>
+          <div class="btn-group">
+            <a 
+              class="portfolio-link"
+              href="https://drive.google.com/file/d/1jCDdR9JKAse-OMP6OKoQx-E0NOYlLjyG/view?usp=sharing"
+              target="_blank"
+              rel="noopener"
+            >View Data Science Report (Google Drive)</a>
+            <a
+              class="linkedin-link"
+              href="https://www.linkedin.com/in/xiaojun-huang0831/"
+              target="_blank"
+              rel="noopener"
+            >Visit my LinkedIn</a>
+          </div>
+          <!-- Spotify Now Playing -->
+          <div id="spotify-section">
+            <p style="opacity:0.6;font-size:0.85rem;">Now Playing</p>
+            <div id="spotify-status">Loading…</div>
+          </div>
+          <footer>
+            &copy; 2025 Xiaojun Huang. &ndash; Built with Node.js
+          </footer>
+          <!-- FLIP BUTTON: symbol and closer to the bottom of this block -->
+          <div style="margin-top:16px; text-align:center;">
+            <button class="icon-flip-btn"
+                    id="flipToggleBtn"
+                    aria-label="See Hobbies"
+                    title="See Hobbies"
+            >
+              <span aria-hidden="true" style="font-size:1.55em;display:inline-block;transform: translateY(2px);">★</span>
+            </button>
+          </div>
+        </div>
       </div>
-      <div class="btn-group">
-        <a 
-          class="portfolio-link"
-          href="https://drive.google.com/file/d/1jCDdR9JKAse-OMP6OKoQx-E0NOYlLjyG/view?usp=sharing"
-          target="_blank"
-          rel="noopener"
-        >View Data Science Report (Google Drive)</a>
-        <a
-          class="linkedin-link"
-          href="https://www.linkedin.com/in/xiaojun-huang0831/"
-          target="_blank"
-          rel="noopener"
-        >Visit my LinkedIn</a>
+      <!-- BACK: Hobbies -->
+      <div class="flip-face back">
+        <div class="hobbies-container">
+          <h2 class="hobbies-title">Some Things I Enjoy</h2>
+          <div class="hobbies-desc">
+            When I'm not digging into data and code, you can find me...
+          </div>
+          <ul class="hobbies-list">
+            <li>Exploring urban landscapes with my camera</li>
+            <li>Cycling to new places (and snacks 🍜)</li>
+            <li>Playing piano or tinkering with new synth sounds</li>
+            <li>Reading sci-fi/fantasy novels &amp; webcomics</li>
+            <li>Bouldering at the local climbing gym</li>
+          </ul>
+          <!-- FLIP BACK BUTTON: left arrow, symbol only -->
+          <div style="margin-top:27px; text-align:center;">
+            <button class="icon-flip-btn flip-btn-back"
+                    id="flipBackBtn"
+                    aria-label="Back to Portfolio"
+                    title="Back to Portfolio"
+            >
+              <span aria-hidden="true" style="font-size:1.55em;display:inline-block;transform: translateY(2px);">&#8592;</span>
+            </button>
+          </div>
+        </div>
       </div>
-      <!-- Spotify Now Playing -->
-      <div id="spotify-section">
-        <p style="opacity:0.6;font-size:0.85rem;">Now Playing</p>
-        <div id="spotify-status">Loading…</div>
-      </div>
-      <footer>
-        &copy; 2025 Xiaojun Huang. &ndash; Built with Node.js
-      </footer>
-    </div>
-  </div>
-  <!-- FLIP BUTTON (outside of container, after copyright) -->
-  <div style="text-align:center;margin-top:20px;">
-    <button class="flip-btn" id="flipToggleBtn">Flip to Hobbies</button>
-  </div>
-
-  <!-- HOBBIES CONTENT (initially hidden) -->
-  <div id="hobbies-content" style="display:none;">
-    <div class="hobbies-container">
-      <h2 class="hobbies-title">Some Things I Enjoy</h2>
-      <div class="hobbies-desc">
-        When I'm not digging into data and code, you can find me...
-      </div>
-      <ul class="hobbies-list">
-        <li>Exploring urban landscapes with my camera</li>
-        <li>Cycling to new places (and snacks 🍜)</li>
-        <li>Playing piano or tinkering with new synth sounds</li>
-        <li>Reading sci-fi/fantasy novels &amp; webcomics</li>
-        <li>Bouldering at the local climbing gym</li>
-      </ul>
-      <button class="flip-btn" id="flipBackBtn">Back to Portfolio</button>
     </div>
   </div>
   <script src="script.js"></script>
   <script>
-    // Flip to hobbies
+    // --- Animated FLIP LOGIC ---
+    const flipCard = document.getElementById('flipCard');
     const flipBtn = document.getElementById('flipToggleBtn');
     const flipBackBtn = document.getElementById('flipBackBtn');
-    const mainContent = document.getElementById('main-content');
-    const hobbiesContent = document.getElementById('hobbies-content');
-    let hobbiesBgAdded = false;
 
-    function showHobbies() {
-      mainContent.style.display = 'none';
-      hobbiesContent.style.display = 'block';
+    // Add/remove 'flipped' for Y axis 3D animation
+    flipBtn.onclick = function() {
+      flipCard.classList.add('flipped');
       document.body.classList.add('hobbies-bg');
-      // Lazy attach event in case this didn't exist at page load
-      if (!hobbiesBgAdded) {
-        document.getElementById('flipBackBtn').onclick = showPortfolio;
-        hobbiesBgAdded = true;
-      }
-    }
-    function showPortfolio() {
-      hobbiesContent.style.display = 'none';
-      mainContent.style.display = 'block';
+    };
+    flipBackBtn.onclick = function() {
+      flipCard.classList.remove('flipped');
       document.body.classList.remove('hobbies-bg');
-    }
-    flipBtn.onclick = showHobbies;
-    // If pre-existing back button (eg. js reload), attach event
-    if (document.getElementById('flipBackBtn')) {
-      document.getElementById('flipBackBtn').onclick = showPortfolio;
-    }
+    };
+
+    // Optional: Keyboard support for accessibility (left/right arrow)
+    document.addEventListener('keydown', e => {
+      if(flipCard.classList.contains('flipped')) {
+        if(e.key === 'ArrowLeft' || e.key === 'Escape') {
+          flipBackBtn.focus(); flipBackBtn.click();
+        }
+      } else {
+        if(e.key === 'ArrowRight') {
+          flipBtn.focus(); flipBtn.click();
+        }
+      }
+    });
     // You must REPLACE the value in .hobbies-bg background url() with your image file location.
     // Example: background: url('images/my_hobbies.jpg') center center/cover no-repeat fixed;
   </script>
