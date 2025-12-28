@@ -6,6 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <!-- Use Proxima Nova via Bunny Fonts CDN (open alternative), fallback to system sans -->
   <link rel="stylesheet" href="https://fonts.bunny.net/css?family=proxima-nova:400,600" />
+  <!-- Add a handwriting font for 'hover!' callout (Shadows Into Light from Google Fonts) -->
+  <link href="https://fonts.googleapis.com/css?family=Shadows+Into+Light&display=swap" rel="stylesheet">
   <style>
     body {
       /* Attempt to use Bunny Fonts' Proxima Nova, fallback to Segoe UI, system fonts */
@@ -59,10 +61,19 @@
       z-index: 2;
       margin: 0;
     }
+    /* Hide unused h1, and ensure custom image behaves responsively */
+    .portfolio-title-img {
+      display: block;
+      max-width: 360px;
+      width: 85%;
+      margin: 0 auto 20px auto;
+      height: auto;
+      filter: drop-shadow(0 1px 6px rgba(110, 90, 180, .08));
+      user-select: none;
+      pointer-events: none;
+    }
     h1 {
-      margin-top: 0;
-      font-size: 2.3rem;
-      color: #234;
+      display:none; /* Hide text title, image replaces it */
     }
     .desc {
       font-size: 1.13rem;
@@ -109,6 +120,48 @@
       position: relative;
       max-width: 620px;
     }
+    /* Callout wrapper for arrow & "hover!" */
+    .hover-arrow-callout {
+      position: absolute;
+      left: 0;
+      bottom: -22px;
+      /* adjust bottom slightly above/below as needed */
+      display: flex;
+      align-items: flex-end;
+      pointer-events:none;
+      z-index: 40;
+      width: 180px;
+      height: 72px;
+      /* makes sure it won't overlap flip btn too much */
+    }
+    .hover-arrow-svg {
+      width: 64px;
+      height: 66px;
+      display: block;
+      /* Arrow color matches progress-ring__circle */
+      stroke: #7f57ec;
+      stroke-width: 3;
+      fill: none;
+      margin-left: 8px;
+      margin-right: -7px;
+      filter: drop-shadow(0px 2px 4px #e5dbf6b0);
+      /* Smoother curved effect visually */
+    }
+    .hover-arrow-handwrite {
+      margin-bottom: 10px;
+      margin-left: 1px;
+      font-family: 'Shadows Into Light', cursive, sans-serif;
+      font-size: 1.54rem;
+      color: #7f57ec;
+      letter-spacing: 1px;
+      white-space: nowrap;
+      user-select: none;
+      pointer-events: none;
+      /* A slight handdrawn look: */
+      transform: rotate(-8deg);
+      text-shadow: 0 2px 10px #e5dbf688;
+    }
+
     .flip-image-btn-holder {
       position: relative;
       width: 66px;
@@ -258,12 +311,34 @@
       .flip-perspective { margin: 32px auto; }
       .flip-btn-outer { margin-top: 18px; }
       .flip-image-btn-holder { width: 52vw; max-width: 70px; }
+      .hover-arrow-callout {
+        width: 116px !important;
+      }
+      .hover-arrow-handwrite {
+        font-size: 1.02rem;
+      }
+      .hover-arrow-svg {
+        width: 38px;
+        height: 39px;
+      }
     }
   </style>
 </head>
 <body>
   <!-- FLIP BUTTON WITH PROGRESS RING -->
-  <div class="flip-btn-outer">
+  <div class="flip-btn-outer" style="position:relative;">
+    <!-- Handdrawn Arrow + hover! callout (only visible on front) -->
+    <div class="hover-arrow-callout" id="hoverArrowCallout">
+      <svg class="hover-arrow-svg" viewBox="0 0 60 64" aria-hidden="true" focusable="false">
+        <path d="M56 58
+          C 40 56, 20 42, 30 28
+          S 47 5, 8 28
+          " 
+          style="stroke: #7f57ec; stroke-width:3.3; fill: none; stroke-linecap: round; stroke-linejoin: round;" />
+        <polyline points="55,57 58,58 56.5,60" style="stroke:#7f57ec;stroke-width:3;fill:none;stroke-linecap:round"/>
+      </svg>
+      <div class="hover-arrow-handwrite">hover!</div>
+    </div>
     <div class="flip-image-btn-holder" id="flipBtnHolder" style="pointer-events:auto;">
       <!-- Progress Ring SVG -->
       <svg class="progress-ring" width="66" height="66">
@@ -304,6 +379,12 @@
       <!-- FRONT: Portfolio -->
       <div class="flip-face front">
         <div class="container">
+          <img
+            class="portfolio-title-img"
+            src="https://raw.githubusercontent.com/xiaojun0831/portfolio/main/media/signature.png"
+            alt="My Data Science Portfolio Handwritten Logo"
+            draggable="false"
+          />
           <h1>My Data Science Portfolio</h1>
           <div class="desc">
             Welcome! Explore my analysis—click the links below to view my featured data science report and connect on LinkedIn.
@@ -359,6 +440,7 @@
     const flipBtnHolder = document.getElementById('flipBtnHolder');
     const ring = flipBtnHolder.querySelector('.progress-ring__circle');
     const ringBg = flipBtnHolder.querySelector('.progress-ring__bg');
+    const hoverArrowCallout = document.getElementById('hoverArrowCallout');
     const PROGRESS_DURATION = 850; // ms
     const RADIUS = 28;
     const RING_CIRC = 2 * Math.PI * RADIUS;
@@ -372,7 +454,18 @@
 
     // --- FIX: Block hover/progress if card is flipped ---
     let preventingFlipBtns = false;
-    
+
+    // Show/hide arrow callout only on FRONT face
+    function updateArrowCallout() {
+      if (flipCard.classList.contains('flipped')) {
+        hoverArrowCallout.style.opacity = "0";
+        hoverArrowCallout.style.pointerEvents = "none";
+      } else {
+        hoverArrowCallout.style.opacity = "1";
+        hoverArrowCallout.style.pointerEvents = "none";
+      }
+    }
+
     function vibrateInterfaceStart() {
       document.body.classList.add('vibrate-moderate');
     }
@@ -405,6 +498,7 @@
         document.body.classList.add('hobbies-bg');
         updateFlipBtns();
         resetProgressRing();
+        updateArrowCallout();
       }
     }
     function cancelRingAndVibe() {
@@ -425,6 +519,7 @@
         flipBackBtn.style.display = "none";
         preventingFlipBtns = false;
       }
+      updateArrowCallout();
     }
 
     // --- Block progress/vibration if currently flipped or just unflipped ---
@@ -461,6 +556,7 @@
           document.body.classList.add('hobbies-bg');
           updateFlipBtns();
           resetProgressRing();
+          updateArrowCallout();
         }, 220);
       }
     });
@@ -480,6 +576,7 @@
           document.body.classList.add('hobbies-bg');
           updateFlipBtns();
           resetProgressRing();
+          updateArrowCallout();
         }, 210);
       }
     });
@@ -492,6 +589,7 @@
       // --- FIX: Immediately cancel any in-progress vibration, and require pointerleave before re-enabling hover flip ---
       cancelRingAndVibe();
       preventingFlipBtns = true; // block triggers until pointerleave on flipBtn happens
+      updateArrowCallout();
     };
 
     // Accessibility keys for flipping (Arrow keys, Escape)
@@ -513,12 +611,14 @@
             document.body.classList.add('hobbies-bg');
             updateFlipBtns();
             resetProgressRing();
+            updateArrowCallout();
           }, 220);
         }
       }
     });
 
     updateFlipBtns();
+    updateArrowCallout();
   </script>
 </body>
 </html>
