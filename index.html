@@ -4,11 +4,12 @@
   <meta charset="UTF-8">
   <title>My Data Science Portfolio</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Use Proxima Nova via Adobe Fonts or Fallbacks if unavailable -->
-  <link href="https://fonts.googleapis.com/css2?family=Proxima+Nova:wght@400;600&display=swap" rel="stylesheet">
+  <!-- Use Proxima Nova via Bunny Fonts CDN (open alternative), fallback to system sans -->
+  <link rel="stylesheet" href="https://fonts.bunny.net/css?family=proxima-nova:400,600" />
   <style>
     body {
-      font-family: 'Proxima Nova', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      /* Attempt to use Bunny Fonts' Proxima Nova, fallback to Segoe UI, system fonts */
+      font-family: 'Proxima Nova', 'proxima-nova', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background: #f7f7fa;
       color: #222;
       margin: 0;
@@ -124,7 +125,7 @@
       height: 54px;
       border-radius: 50%;
       box-shadow: 0 2px 12px #a78ee522;
-      background: #f5f3fe url('https://placehold.co/48x48?text=FLIP') center center/48px 48px no-repeat;
+      background: url('https://github.com/xiaojun0831/portfolio/blob/main/media/mmexport1718152243704.jpg') center center/48px 48px no-repeat;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -191,7 +192,7 @@
       height: 54px;
       border-radius: 50%;
       box-shadow: 0 2px 12px #a292d822;
-      background: #e4e8f7 url('https://placehold.co/48x48?text=BACK') center center/48px 48px no-repeat;
+      background: url('https://github.com/xiaojun0831/portfolio/blob/main/media/mmexport1718152243704.jpg') center center/48px 48px no-repeat;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -216,7 +217,7 @@
 
     /* Hobbies view specific styles */
     .hobbies-bg {
-      background: url('PATH/TO/YOUR/HOBBIES-BG.jpg') center center/cover no-repeat fixed;
+      background: url('https://github.com/xiaojun0831/portfolio/blob/main/media/000040.JPG') center center/cover no-repeat fixed;
       transition: background 0.5s;
       min-height: 100vh;
     }
@@ -518,8 +519,6 @@
     });
 
     updateFlipBtns();
-    // You must REPLACE the value in .hobbies-bg background url() with your image file location.
-    // Example: background: url('images/my_hobbies.jpg') center center/cover no-repeat fixed;
   </script>
 </body>
 </html>
