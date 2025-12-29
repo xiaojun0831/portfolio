@@ -4,619 +4,89 @@
   <meta charset="UTF-8">
   <title>My Data Science Portfolio</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Use Proxima Nova via Google Fonts for reliable loading, fallback to system sans -->
+
+  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <!-- Shadows Into Light (handwriting for 'hover!'), Proxima Nova via Google Fonts alternative (Montserrat as closest, or include Proxima Nova via webfont) -->
-  <!-- For most users, Montserrat is visually closest open source alternative; for real Proxima Nova web, self-host or paid license needed -->
   <link href="https://fonts.googleapis.com/css?family=Shadows+Into+Light&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
-  <style>
-    html, body {
-      height: 100%;
-    }
-    body {
-      font-family: 'Montserrat', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #f7f7fa;
-      color: #222;
-      margin: 0;
-      padding: 0;
-      transition: background 0.4s;
-      min-height: 100vh;
-    }
-    .flip-perspective {
-      perspective: 1200px;
-      position: relative;
-      max-width: 620px;
-      margin: 64px auto;
-    }
-    .flip-card {
-      width: 100%;
-      position: relative;
-      transition: transform 0.82s cubic-bezier(.76,.05,.25,.99);
-      transform-style: preserve-3d;
-      min-height: 100%;
-    }
-    .flip-card.flipped {
-      transform: rotateY(180deg);
-    }
-    .flip-face {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      left: 0; top: 0;
-      backface-visibility: hidden;
-    }
-    .flip-face.front {
-      z-index: 2;
-    }
-    .flip-face.back {
-      transform: rotateY(180deg);
-      z-index: 1;
-    }
-    .container, .hobbies-container {
-      max-width: 620px;
-      background: #fff;
-      box-shadow: 0 10px 32px rgba(61,83,141,0.11);
-      border-radius: 15px;
-      padding: 42px 30px 38px 30px;
-      text-align: center;
-      transition: background 0.4s, color 0.4s;
-      position: relative;
-      z-index: 2;
-      margin: 0;
-    }
-    .portfolio-title-img {
-      display: block;
-      max-width: 360px;
-      width: 85%;
-      margin: 0 auto 20px auto;
-      height: auto;
-      filter: drop-shadow(0 1px 6px rgba(110, 90, 180, .08));
-      user-select: none;
-      pointer-events: none;
-    }
-    h1 {
-      display:none;
-    }
-    .desc {
-      font-size: 1.13rem;
-      color: #535c69;
-      margin-bottom: 36px;
-    }
-    .btn-group {
-      margin-bottom: 36px;
-    }
-    .portfolio-link, .linkedin-link {
-      display: inline-block;
-      padding: 13px 30px;
-      font-size: 1.15rem;
-      color: white;
-      background: #2265af;
-      border: none;
-      border-radius: 7px;
-      text-decoration: none;
-      font-weight: 600;
-      transition: background 0.16s;
-      box-shadow: 0 2px 8px #5875ad22;
-      margin: 0 10px 10px 0;
-      cursor: pointer;
-      font-family: 'Montserrat', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-    .portfolio-link:hover, .linkedin-link:hover {
-      background: #14436b;
-    }
-    .linkedin-link {
-      background: #0077b5;
-    }
-    .linkedin-link:hover {
-      background: #005983;
-    }
 
-    /* --- FLIP-BTN with PROGRESS RING STYLING --- */
-    .flip-btn-outer {
-      margin: 36px auto 0 auto;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 70px;
-      pointer-events: none;
-      z-index: 10;
-      position: relative;
-      max-width: 620px;
-    }
-    /* ARROW/CALLOUT positioning: responsive to button position */
-    .hover-arrow-callout {
-      position: absolute;
-      /* Responsive offsets to align "arrowhead" beside the left edge of the button */
-      left: calc(50% - 115px); /* calculated: half parent width minus ~btn+ring/2 + arrow width */
-      bottom: 7px;
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      pointer-events: none;
-      z-index: 40;
-      width: 110px;
-      height: 66px;
-      /* Arrow tip at (105,52) aligns with the button's left edge */
-      /* This is more robust than a "right" offset, avoids squish/misalignment on screens */
-      /* On mobile, this is overridden below */
-    }
-    .hover-arrow-handwrite {
-      margin-bottom: 0px;
-      margin-right: 4px;
-      font-family: 'Shadows Into Light', cursive, sans-serif;
-      font-size: 1.4rem;
-      color: #7f57ec;
-      letter-spacing: 1px;
-      white-space: nowrap;
-      user-select: none;
-      pointer-events: none;
-      transform: rotate(-12deg);
-      text-shadow: 0 2px 10px #e5dbf688;
-    }
-    .hover-arrow-svg {
-      width: 105px;
-      height: 56px;
-      display: block;
-      /* Arrow color matches progress-ring__circle */
-      stroke: #7f57ec;
-      stroke-width: 3;
-      fill: none;
-      margin-right: 0px;
-      filter: drop-shadow(0px 2px 4px #e5dbf6b0);
-    }
-
-    .flip-image-btn-holder {
-      position: relative;
-      width: 66px;
-      height: 66px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      pointer-events: auto;
-    }
-    .flip-image-btn {
-      all: unset;
-      cursor: pointer;
-      width: 54px;
-      height: 54px;
-      border-radius: 50%;
-      box-shadow: 0 2px 12px #a78ee522;
-      background: url('https://raw.githubusercontent.com/xiaojun0831/portfolio/main/media/mmexport1718152243704.jpg') center center/48px 48px no-repeat;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: absolute;
-      top: 6px;
-      left: 6px;
-      z-index: 2;
-      color: #6c49ac;
-      font-size: 1.1rem;
-      transition: background 0.2s, box-shadow 0.2s;
-    }
-    .flip-image-btn[disabled] {
-      opacity: 0.7;
-      cursor: default;
-    }
-    .progress-ring {
-      position: absolute;
-      width: 66px;
-      height: 66px;
-      left: 0;
-      top: 0;
-      z-index: 3;
-      pointer-events: none;
-      touch-action: none;
-    }
-    .progress-ring__circle {
-      stroke: #7f57ec;
-      stroke-width: 4.4;
-      fill: none;
-      stroke-linecap: round;
-      transition: stroke-dashoffset 0.11s;
-      filter: drop-shadow(0 0 5px #d5cafd6c);
-    }
-    .progress-ring__bg {
-      stroke: #efeafd;
-      stroke-width: 4.4;
-      fill: none;
-    }
-
-    @keyframes vibrate-interface {
-      0% { transform: translate(0px,0px) rotate(0deg);}
-      10% { transform: translate(-1px,1px) rotate(-1deg);}
-      20% { transform: translate(-2px,0px) rotate(1deg);}
-      30% { transform: translate(1px,-1px) rotate(0deg);}
-      40% { transform: translate(3px,1px) rotate(1deg);}
-      50% { transform: translate(-1px,2px) rotate(-1deg);}
-      60% { transform: translate(-3px,1px) rotate(0deg);}
-      70% { transform: translate(2px,1px) rotate(-1deg);}
-      80% { transform: translate(-1px,-1px) rotate(1deg);}
-      90% { transform: translate(2px,2px) rotate(0deg);}
-      100% { transform: translate(0px,0px) rotate(0deg);}
-    }
-    .vibrate-moderate {
-      animation: vibrate-interface 0.09s linear infinite;
-    }
-    .flip-image-btn-back {
-      all: unset;
-      cursor: pointer;
-      width: 54px;
-      height: 54px;
-      border-radius: 50%;
-      box-shadow: 0 2px 12px #a292d822;
-      background: url('https://raw.githubusercontent.com/xiaojun0831/portfolio/main/media/mmexport1718152243704.jpg') center center/48px 48px no-repeat;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: absolute;
-      top: 6px;
-      left: 6px;
-      z-index: 2;
-      color: #7138a6;
-      font-size: 1.1rem;
-      transition: background 0.2s, box-shadow 0.2s;
-    }
-    .flip-image-btn-back[disabled] {
-      opacity: 0.5;
-      cursor: default;
-    }
-
-    footer {
-      margin-top: 35px;
-      font-size: .99rem;
-      color: #7e8991;
-    }
-
-    .hobbies-bg {
-      background: url('https://raw.githubusercontent.com/xiaojun0831/portfolio/main/media/000040.JPG') center center/cover no-repeat fixed;
-      transition: background 0.5s;
-      min-height: 100vh;
-    }
-    .hobbies-container {
-      background: rgba(255,255,255,0.90);
-      box-shadow: 0 10px 32px rgba(61,83,141,0.13);
-      padding: 44px 34px 34px 34px;
-    }
-    .hobbies-title {
-      margin-top: 0;
-      font-size: 2.1rem;
-      color: #472246;
-    }
-    .hobbies-desc {
-      font-size: 1.08rem;
-      color: #593e58;
-      margin-bottom: 32px;
-    }
-    .hobbies-list {
-      list-style: none;
-      padding: 0;
-      margin: 0 auto 28px auto;
-      font-size: 1.10rem;
-      color: #412b41;
-    }
-    .hobbies-list li::before {
-      content: "•";
-      color: #7438c9;
-      margin-right: 10px;
-    }
-    .flip-extra-spacing {
-      margin-bottom: 40px;
-    }
-
-    @media (max-width: 650px) {
-      .container, .hobbies-container {
-        padding: 22px 5vw 18px 5vw;
-      }
-      .flip-perspective { margin: 32px auto; }
-      .flip-btn-outer { margin-top: 18px; }
-      .flip-image-btn-holder { width: 52vw; max-width: 70px; }
-      .hover-arrow-callout {
-        left: 1vw !important;
-        right: unset !important;
-        width: 38px !important;
-        height: 36px !important;
-        min-width: 24px;
-      }
-      .hover-arrow-handwrite {
-        font-size: 1.01rem;
-        margin-bottom: 0;
-        margin-right: 3px;
-      }
-      .hover-arrow-svg {
-        width: 31px;
-        height: 24px;
-      }
-    }
-  </style>
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
-  <!-- FLIP BUTTON WITH PROGRESS RING -->
-  <div class="flip-btn-outer" style="position:relative;">
-    <!-- Handdrawn Arrow + hover! callout (only visible on front) -->
+
+  <!-- FLIP BUTTON -->
+  <div class="flip-btn-outer">
     <div class="hover-arrow-callout" id="hoverArrowCallout">
       <div class="hover-arrow-handwrite">hover!</div>
-      <svg class="hover-arrow-svg" viewBox="0 0 110 56" aria-hidden="true" focusable="false">
-        <!-- Longer S-shaped arrow, tip at (105,52) for button alignment (not U-shaped) -->
-        <path d="M10,12 
-                 Q 30,32 55,26
-                 Q 85,18 90,36
-                 Q 97,48 105,52" 
-              style="stroke: #7f57ec; stroke-width:3.2; fill: none; stroke-linecap: round; stroke-linejoin: round;" />
-        <!-- Arrowhead -->
-        <polyline points="105,52 98,53 102,45" style="stroke:#7f57ec;stroke-width:2.8;fill:none;stroke-linecap:round"/>
+      <svg class="hover-arrow-svg" viewBox="0 0 110 56">
+        <path d="M10,12 Q 30,32 55,26 Q 85,18 90,36 Q 97,48 105,52"/>
+        <polyline points="105,52 98,53 102,45"/>
       </svg>
     </div>
-    <div class="flip-image-btn-holder" id="flipBtnHolder" style="pointer-events:auto;">
-      <!-- Progress Ring SVG -->
+
+    <div class="flip-image-btn-holder" id="flipBtnHolder">
       <svg class="progress-ring" width="66" height="66">
-        <circle
-          class="progress-ring__bg"
-          cx="33" cy="33" r="28"
-        />
-        <circle
-          class="progress-ring__circle"
-          cx="33" cy="33" r="28"
-          stroke-dasharray="176"
-          stroke-dashoffset="176"
-        />
+        <circle class="progress-ring__bg" cx="33" cy="33" r="28"/>
+        <circle class="progress-ring__circle" cx="33" cy="33" r="28"/>
       </svg>
-      <button
-        type="button"
-        class="flip-image-btn"
-        id="flipToggleBtn"
-        aria-label="See Hobbies"
-        title="See Hobbies"
-        tabindex="0"
-        style="display: block;"
-      ></button>
-      <!-- BACK FLIP BUTTON (no ring or progress: instant flip) -->
-      <button
-        type="button"
-        class="flip-image-btn-back"
-        id="flipBackBtn"
-        aria-label="Back to Portfolio"
-        title="Back to Portfolio"
-        tabindex="0"
-        style="display: none;"
-      ></button>
+
+      <button class="flip-image-btn" id="flipToggleBtn" aria-label="See Hobbies"></button>
+      <button class="flip-image-btn-back" id="flipBackBtn" aria-label="Back"></button>
     </div>
   </div>
+
+  <!-- FLIP CARD -->
   <div class="flip-perspective">
     <div class="flip-card" id="flipCard">
-      <!-- FRONT: Portfolio -->
+
+      <!-- FRONT -->
       <div class="flip-face front">
         <div class="container">
-          <img
-            class="portfolio-title-img"
-            src="https://raw.githubusercontent.com/xiaojun0831/portfolio/main/media/signature.png"
-            alt="My Data Science Portfolio Handwritten Logo"
-            draggable="false"
-          />
-          <h1>My Data Science Portfolio</h1>
+          <img class="portfolio-title-img"
+               src="https://raw.githubusercontent.com/xiaojun0831/portfolio/main/media/signature.png"
+               alt="Portfolio Logo">
+
           <div class="desc">
-            Welcome! Explore my analysis—click the links below to view my featured data science report and connect on LinkedIn.
+            Welcome! Explore my analysis and connect on LinkedIn.
           </div>
+
           <div class="btn-group">
-            <a 
-              class="portfolio-link"
-              href="https://drive.google.com/file/d/1jCDdR9JKAse-OMP6OKoQx-E0NOYlLjyG/view?usp=sharing"
-              target="_blank"
-              rel="noopener"
-            >View Data Science Report (Google Drive)</a>
-            <a
-              class="linkedin-link"
-              href="https://www.linkedin.com/in/xiaojun-huang0831/"
-              target="_blank"
-              rel="noopener"
-            >Visit my LinkedIn</a>
+            <a class="portfolio-link" target="_blank"
+               href="https://drive.google.com/file/d/1jCDdR9JKAse-OMP6OKoQx-E0NOYlLjyG/view">
+              View Data Science Report
+            </a>
+
+            <a class="linkedin-link" target="_blank"
+               href="https://www.linkedin.com/in/xiaojun-huang0831/">
+              Visit my LinkedIn
+            </a>
           </div>
-          <!-- Spotify Now Playing -->
-          <div id="spotify-section">
-            <p style="opacity:0.6;font-size:0.85rem;">Now Playing</p>
-            <div id="spotify-status">Loading…</div>
-          </div>
-          <footer>
-            &copy; 2025 Xiaojun Huang. &ndash; Built with Node.js
-          </footer>
+
+          <footer>&copy; 2025 Xiaojun Huang</footer>
         </div>
       </div>
-      <!-- BACK: Hobbies -->
+
+      <!-- BACK -->
       <div class="flip-face back">
         <div class="hobbies-container">
           <h2 class="hobbies-title">Some Things I Enjoy</h2>
-          <div class="hobbies-desc">
-            When I'm not digging into data and code, you can find me...
-          </div>
           <ul class="hobbies-list">
-            <li>Exploring urban landscapes with my camera</li>
-            <li>Cycling to new places (and snacks 🍜)</li>
-            <li>Playing piano or tinkering with new synth sounds</li>
-            <li>Reading sci-fi/fantasy novels &amp; webcomics</li>
-            <li>Bouldering at the local climbing gym</li>
+            <li>Photography</li>
+            <li>Cycling</li>
+            <li>Piano</li>
+            <li>Reading</li>
+            <li>Bouldering</li>
           </ul>
         </div>
       </div>
+
     </div>
   </div>
-  <script src="script.js"></script>
-  <script>
-    // --- FLIP LOGIC with PROGRESS & VIBRATION ---
-    const flipCard = document.getElementById('flipCard');
-    const flipBtn = document.getElementById('flipToggleBtn');
-    const flipBackBtn = document.getElementById('flipBackBtn');
-    const flipBtnHolder = document.getElementById('flipBtnHolder');
-    const ring = flipBtnHolder.querySelector('.progress-ring__circle');
-    const ringBg = flipBtnHolder.querySelector('.progress-ring__bg');
-    const hoverArrowCallout = document.getElementById('hoverArrowCallout');
-    const PROGRESS_DURATION = 850; // ms
-    const RADIUS = 28;
-    const RING_CIRC = 2 * Math.PI * RADIUS;
 
-    // Set initial SVG dasharray/dashoffset
-    ring.setAttribute('stroke-dasharray', RING_CIRC);
-    ring.setAttribute('stroke-dashoffset', RING_CIRC);
-
-    // ---- HOVER/RING/VIBE CONTROL LOGIC
-    let progressTimer = null, animationStart = 0, ticking = false;
-
-    // --- FIX: Block hover/progress if card is flipped ---
-    let preventingFlipBtns = false;
-
-    // Show/hide arrow callout only on FRONT face
-    function updateArrowCallout() {
-      if (flipCard.classList.contains('flipped')) {
-        hoverArrowCallout.style.opacity = "0";
-        hoverArrowCallout.style.pointerEvents = "none";
-      } else {
-        hoverArrowCallout.style.opacity = "1";
-        hoverArrowCallout.style.pointerEvents = "none";
-      }
-    }
-
-    function vibrateInterfaceStart() {
-      document.body.classList.add('vibrate-moderate');
-    }
-    function vibrateInterfaceStop() {
-      document.body.classList.remove('vibrate-moderate');
-    }
-    function startProgressRing() {
-      animationStart = performance.now();
-      ticking = true;
-      requestAnimationFrame(progressTick);
-    }
-    function resetProgressRing() {
-      ring.setAttribute('stroke-dashoffset', RING_CIRC);
-    }
-    function progressTick(now) {
-      if (!ticking) return;
-      let elapsed = now - animationStart;
-      if (elapsed > PROGRESS_DURATION) elapsed = PROGRESS_DURATION;
-      const percent = elapsed / PROGRESS_DURATION;
-      ring.setAttribute('stroke-dashoffset', (RING_CIRC * (1 - percent)).toFixed(2));
-      if (elapsed < PROGRESS_DURATION) {
-        requestAnimationFrame(progressTick);
-      } else {
-        ticking = false;
-        // End: Do the flip!
-        vibrateInterfaceStop();
-        flipBtn.disabled = true;
-        setTimeout(() => flipBtn.disabled = false, 700);
-        flipCard.classList.add('flipped');
-        document.body.classList.add('hobbies-bg');
-        updateFlipBtns();
-        resetProgressRing();
-        updateArrowCallout();
-      }
-    }
-    function cancelRingAndVibe() {
-      ticking = false;
-      resetProgressRing();
-      vibrateInterfaceStop();
-    }
-
-    // --- BUTTON MODE MANAGEMENT
-    function updateFlipBtns() {
-      if (flipCard.classList.contains('flipped')) {
-        flipBtn.style.display = "none";
-        flipBackBtn.style.display = "block";
-        preventingFlipBtns = true;
-      } else {
-        flipBtn.style.display = "block";
-        flipBackBtn.style.display = "none";
-        preventingFlipBtns = false;
-      }
-      updateArrowCallout();
-    }
-
-    function canTriggerFlipBtn() {
-      return !flipCard.classList.contains('flipped') && !preventingFlipBtns;
-    }
-
-    flipBtn.addEventListener('pointerenter', e => {
-      if (!canTriggerFlipBtn()) return;
-      vibrateInterfaceStart();
-      startProgressRing();
-    });
-    flipBtn.addEventListener('pointerleave', e => {
-      if (ticking) {
-        cancelRingAndVibe();
-      }
-      preventingFlipBtns = false;
-    });
-    flipBtn.addEventListener('pointercancel', cancelRingAndVibe);
-
-    flipBtn.addEventListener('keydown', (e) => {
-      if (e.key === ' ' || e.key === 'Enter') {
-        if (!canTriggerFlipBtn()) return;
-        cancelRingAndVibe();
-        vibrateInterfaceStart();
-        ring.setAttribute('stroke-dashoffset', 0);
-        setTimeout(() => {
-          vibrateInterfaceStop();
-          flipCard.classList.add('flipped');
-          document.body.classList.add('hobbies-bg');
-          updateFlipBtns();
-          resetProgressRing();
-          updateArrowCallout();
-        }, 220);
-      }
-    });
-
-    flipBtn.addEventListener('click', (e) => {
-      if ('ontouchstart' in window) {
-        if (!canTriggerFlipBtn()) return;
-        if (ticking) {
-          cancelRingAndVibe();
-        }
-        vibrateInterfaceStart();
-        ring.setAttribute('stroke-dashoffset', 0);
-        setTimeout(() => {
-          vibrateInterfaceStop();
-          flipCard.classList.add('flipped');
-          document.body.classList.add('hobbies-bg');
-          updateFlipBtns();
-          resetProgressRing();
-          updateArrowCallout();
-        }, 210);
-      }
-    });
-
-    flipBackBtn.onclick = function() {
-      flipCard.classList.remove('flipped');
-      document.body.classList.remove('hobbies-bg');
-      updateFlipBtns();
-      cancelRingAndVibe();
-      preventingFlipBtns = true;
-      updateArrowCallout();
-    };
-
-    document.addEventListener('keydown', e => {
-      if(flipCard.classList.contains('flipped')) {
-        if(e.key === 'ArrowLeft' || e.key === 'Escape') {
-          flipBackBtn.focus(); flipBackBtn.click();
-        }
-      } else {
-        if(e.key === 'ArrowRight') {
-          flipBtn.focus();
-          if (!canTriggerFlipBtn()) return;
-          vibrateInterfaceStart();
-          ring.setAttribute('stroke-dashoffset', 0);
-          setTimeout(() => {
-            vibrateInterfaceStop();
-            flipCard.classList.add('flipped');
-            document.body.classList.add('hobbies-bg');
-            updateFlipBtns();
-            resetProgressRing();
-            updateArrowCallout();
-          }, 220);
-        }
-      }
-    });
-
-    updateFlipBtns();
-    updateArrowCallout();
-  </script>
+  <!-- Logic -->
+  <script src="js/flip.js" defer></script>
 </body>
 </html>
