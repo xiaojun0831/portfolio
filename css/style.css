@@ -1,0 +1,63 @@
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: 'Montserrat', sans-serif;
+  background: #f7f7fa;
+}
+
+.container, .hobbies-container {
+  max-width: 620px;
+  margin: auto;
+  background: white;
+  padding: 42px 30px;
+  border-radius: 15px;
+  box-shadow: 0 10px 32px rgba(0,0,0,.12);
+}
+
+.flip-perspective {
+  perspective: 1200px;
+  margin: 64px auto;
+}
+
+.flip-card {
+  transition: transform .8s;
+  transform-style: preserve-3d;
+}
+
+.flip-card.flipped {
+  transform: rotateY(180deg);
+}
+
+.flip-face {
+  position: absolute;
+  width: 100%;
+  backface-visibility: hidden;
+}
+
+.flip-face.back {
+  transform: rotateY(180deg);
+}
+
+/* Flip button */
+.flip-image-btn {
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  background: url('../media/mmexport1718152243704.jpg') center / 48px no-repeat;
+  cursor: pointer;
+}
+
+/* Progress ring */
+.progress-ring__circle {
+  stroke: #7f57ec;
+  stroke-width: 4.4;
+  fill: none;
+  stroke-linecap: round;
+  transition: stroke-dashoffset .12s;
+}
+
+.progress-ring__bg {
+  stroke: #efeafd;
+  stroke-width: 4.4;
+  fill: none;
+}
